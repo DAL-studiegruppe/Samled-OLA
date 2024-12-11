@@ -159,3 +159,29 @@ regPG <- lm(boligsiden$kvmpris ~ boligsiden$grund)
 summary(regPG)
 # Estimate: -0.006, P-værdi: < 0.00972, Multiple R-squared: 0.005567
 # Der er en signifikant negativ sammenhæng mellem grundens størrelse og kvadratmeterpris
+# Vi laver en korrelationsmatrix for alle relevante variabler og visualiserer dem
+
+# Vi sikrer, at alle variabler er numeriske
+boligsiden$kvmpris <- as.numeric(boligsiden$kvmpris)
+boligsiden$størrelse <- as.numeric(boligsiden$størrelse)
+boligsiden$opført <- as.numeric(boligsiden$opført)
+boligsiden$liggetid <- as.numeric(boligsiden$liggetid)
+boligsiden$postnr <- as.numeric(boligsiden$postnr)
+boligsiden$grund <- as.numeric(boligsiden$grund)
+
+# Dobbelttjek at truktur og na inden korrelationsmatrix
+str(boligsiden)
+sum(is.na(boligsiden))
+#Omit bruges til at fjerne NA værdier
+boligsiden <- na.omit(boligsiden)
+sum(is.na(boligsiden))
+
+# Vi laver en korrelationsmatrix for de valgte variabler
+korrelationsmatrix <- cor(boligsiden[, c("kvmpris", "størrelse", "opført", "liggetid", "postnr", "grund")], use = "complete.obs")
+
+# Visualiser korrelationsmatrixen med corrplot
+library(ggcorrplot)
+  	ggcorrplot(korrelationsmatrix,
+             	method = "square",
+             	lab = TRUE,    	
+             	type = "lower")
